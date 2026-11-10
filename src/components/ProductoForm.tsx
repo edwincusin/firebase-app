@@ -68,7 +68,7 @@ function ProductoForm() {
 
 
     return (
-        <div className="pagina">
+        <div>
             <div className="panel">
                 <header className="panel__cabecera">
                     <h1>Registro de productos</h1>
