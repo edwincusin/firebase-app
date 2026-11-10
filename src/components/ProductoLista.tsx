@@ -20,7 +20,7 @@ export const ProductoLista=()=>{
     return (
     <div className="panel lista">
         <header className="lista__cabecera">
-            <h2>Inventario</h2>
+            <h2>Lista productos</h2>
             <span className="contador">{productos.length} registros</span>
         </header>
 
@@ -30,7 +30,7 @@ export const ProductoLista=()=>{
             <ul className="tarjetas">
                 {productos.map((producto) => (
                     <li className="tarjeta" key={producto.id}>
-                        <span className="tarjeta__id">{producto.id.slice(0, 8)}</span>
+                        <span className="tarjeta__id">{producto.id}</span>
                         <h3 className="tarjeta__nombre">{producto.nombre}</h3>
                         <dl className="tarjeta__datos">
                             <div>
