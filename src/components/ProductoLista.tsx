@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { obtenerProductos, type Producto } from "../services/productoService";
+import { obtenerProductos, eliminarProducto, type Producto } from "../services/productoService";
 
 
 interface Props{
@@ -20,6 +20,14 @@ export const ProductoLista=({onEditar}:Props)=>{
         }
         cargarProductos();
     })
+
+    const handleEliminar=async(id:string)=>{
+        try {
+            await eliminarProducto(id);
+        } catch (error) {
+            console.error("ERROR : ",error);
+        }
+    }
 
     return (
     <div className="panel lista">
@@ -48,6 +56,7 @@ export const ProductoLista=({onEditar}:Props)=>{
                         </dl>
                         <dl>
                             <button type="button" onClick={()=>onEditar(producto)}>Editar</button>
+                            <button type="button" onClick={()=>handleEliminar(producto.id)}>Eliminar</button>
                         </dl>
                     </li>
                 ))}
