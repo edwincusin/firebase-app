@@ -1,5 +1,5 @@
 import { db } from "../firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore";
 
 //INTERFASE
 export interface Producto {
@@ -38,3 +38,20 @@ export const obtenerProductos=async():Promise<Producto[]>=>{
 }
 
 
+
+//MODIFICAR UN DOCUMENTO MEDIANTE ID
+export const actualizarProducto=async(
+    id:string,
+    nombre:string,
+    precio:number,
+    stock:number
+)=>{
+
+    const productoRef = doc(db,"productos",id);
+
+    await updateDoc(productoRef,{
+        nombre,
+        precio,
+        stock
+    });
+}
