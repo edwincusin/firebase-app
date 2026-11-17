@@ -7,17 +7,19 @@ export interface Producto {
     nombre:string;
     precio:number;
     stock:number;
+    categoria:string;
 };
 
 
 
 // CREAR PRODUCTO
-export const crearProducto = async (nombre: string, precio: number, stock: number) => {
+export const crearProducto = async (nombre: string, precio: number, stock: number, categoria:string) => {
     const docRef = await addDoc(collection(db, "productos"),
         {
             nombre,
             precio,
             stock,
+            categoria
         });
     return docRef.id;
 };
@@ -44,7 +46,8 @@ export const actualizarProducto=async(
     id:string,
     nombre:string,
     precio:number,
-    stock:number
+    stock:number,
+    categoria:string
 )=>{
 
     const productoRef = doc(db,"productos",id);
@@ -52,7 +55,8 @@ export const actualizarProducto=async(
     await updateDoc(productoRef,{
         nombre,
         precio,
-        stock
+        stock,
+        categoria
     });
 }
 

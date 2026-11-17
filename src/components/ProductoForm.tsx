@@ -5,7 +5,7 @@ import { crearProducto, actualizarProducto, type Producto } from "../services/pr
 
 interface Props {
     productoEditar: Producto | null;
-    onGuardado:()=>void;
+    onGuardado: () => void;
 }
 
 function ProductoForm({ productoEditar, onGuardado }: Props) {
@@ -19,6 +19,7 @@ function ProductoForm({ productoEditar, onGuardado }: Props) {
     const [nombre, setNombre] = useState(productoEditar?.nombre ?? "");
     const [precio, setPrecio] = useState(productoEditar?.precio.toString() ?? "");
     const [stock, setStock] = useState(productoEditar?.stock.toString() ?? "");
+    const [categoria, setCategoria] = useState(productoEditar?.categoria.toString() ?? "");
 
     const [guardando, setGuardando] = useState(false);
     const [errores, setErrores] = useState<Errores>({});
@@ -33,16 +34,16 @@ function ProductoForm({ productoEditar, onGuardado }: Props) {
         try {
 
             if (productoEditar) {//debe llegar algo
-                await actualizarProducto(productoEditar.id, nombre, Number(precio), Number(stock))
+                await actualizarProducto(productoEditar.id, nombre, Number(precio), Number(stock),categoria)
                 console.log("Prductpo actualizado")
                 onGuardado();
 
             } else {
-                const idCreado = await crearProducto(nombre, Number(precio), Number(stock));
+                const idCreado = await crearProducto(nombre, Number(precio), Number(stock), categoria);
                 console.log("Producto creado con ID:", idCreado);
-               
+
             }
-             limpiarFormulario();
+            limpiarFormulario();
 
         } catch (error) {
             console.error("ERROR: ", error)
@@ -126,10 +127,23 @@ function ProductoForm({ productoEditar, onGuardado }: Props) {
                             />
                             {errores.stock && <span className="error" role="alert">{errores.stock}</span>}
                         </div>
+
+                        <div className="campo">
+                            <label htmlFor="nombre">CATEGORIA</label>
+                            <input
+                                id="nombre"
+                                type="text"
+                                placeholder=" CAT"
+                                value={categoria}
+                                onChange={(e) => setCategoria(e.target.value)}
+                            />
+                            {errores.nombre && <span className="error" role="alert">{errores.nombre}</span>}
+                        </div>
+
                     </div>
 
                     <button type="submit" className="boton" disabled={guardando}>
-                        {guardando ? (productoEditar?"Actualizando...":"Guardando...") : (productoEditar?"Actualizar":"Registrar")}
+                        {guardando ? (productoEditar ? "Actualizando..." : "Guardando...") : (productoEditar ? "Actualizar" : "Registrar")}
                     </button>
                 </form>
             </div>
