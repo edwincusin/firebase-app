@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { obtenerProductos, eliminarProducto, type Producto } from "../services/productoService";
+import { escucharProductos, eliminarProducto, type Producto } from "../services/productoService";
 
 
 interface Props {
@@ -9,17 +9,25 @@ interface Props {
 export const ProductoLista = ({ onEditar }: Props) => {
     const [productos, setProductos] = useState<Producto[]>([]);
 
+    // ESCUCHAR PRODUCTOS EN TIEMPO REAL
     useEffect(() => {
-        const cargarProductos = async () => {
-            try {
-                const datos = await obtenerProductos();
+
+        const unsubscribe = escucharProductos(
+            (datos) => {
                 setProductos(datos);
-            } catch (error) {
-                console.error("Error al obtener productos: ", error);
+            },
+            (error) => {
+                console.error("Error al obtener productos:", error);
             }
-        }
-        cargarProductos();
-    })
+        );
+
+        // LIMPIAR LA SUSCRIPCIÓN
+        return () => {
+            unsubscribe();
+        };
+
+    }, []);
+
 
     const handleEliminar = async (id: string) => {
         try {
@@ -55,7 +63,7 @@ export const ProductoLista = ({ onEditar }: Props) => {
                                 </div>
                                 <div>
                                     <dt>Categoria</dt>
-                                    <dd>{producto.categoria}</dd>
+                                    <dd>{producto.categoria || "Sin categoría"}</dd>
                                 </div>
                             </dl>
                             <dl>

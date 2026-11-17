@@ -56,6 +56,7 @@ function ProductoForm({ productoEditar, onGuardado }: Props) {
         setNombre("");
         setPrecio("");
         setStock("");
+        setCategoria("");
         setErrores({});
     }
 
