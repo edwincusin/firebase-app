@@ -6,7 +6,7 @@ import { useState } from "react";
 export const ProductoListaPaginados = () => {
 
     const [productos, setProductos] = useState<Producto[]>([]);
-    const [ultimodocumento, setUltimoDocumento] = useState<QueryDocumentSnapshot<DocumentData>>([]);
+    const [ultimodocumento, setUltimoDocumento] = useState<QueryDocumentSnapshot<DocumentData>>();
 
     const cargarPrimerPagina = async () => {
         const resultado = await obtenerProductosPaginados();
