@@ -1,26 +1,36 @@
 import ProductoForm from "./components/ProductoForm"
 import { ProductoLista } from "./components/ProductoLista"
 import { useState } from "react"
-import type { Producto } from "./services/productoService"
+import { obtenerProductosDisponibles, type Producto } from "./services/productoService"
+import { ProductoListaPaginados } from "./components/ProductoListaPaginada";
 
 function App() {
 
   const [productoEditar, setProductoEditar] = useState<Producto | null>(null);
-  const [recarga, setRecarga] = useState(0);
 
   return (
     <>
-      <div className="pagina">
+       <div className="pagina">
         <ProductoForm
           key={productoEditar?.id ?? "Nuevo"}
           productoEditar={productoEditar}
           onGuardado={()=>{
             setProductoEditar(null);
-            setRecarga((n)=>n+1);
           }}
         />
         <ProductoLista onEditar={setProductoEditar} />
-      </div>
+
+
+        <ProductoListaPaginados/>
+
+      </div> 
+
+    <button onClick={async()=>{
+      const productosDeConsulta=await obtenerProductosDisponibles();
+      console.log(productosDeConsulta);
+    }
+    }>CONSULTA</button>
+
 
     </>
   )

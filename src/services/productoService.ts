@@ -1,19 +1,19 @@
 import { db } from "../firebase";
-import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc, type DocumentData } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc, query, where, orderBy, limit, type DocumentData, getDocs, QueryDocumentSnapshot, startAfter } from "firebase/firestore";
 
 //INTERFASE
 export interface Producto {
-    id:string;
-    nombre:string;
-    precio:number;
-    stock:number;
-    categoria:string;
+    id: string;
+    nombre: string;
+    precio: number;
+    stock: number;
+    categoria: string;
 };
 
 
 
 // CREAR PRODUCTO
-export const crearProducto = async (nombre: string, precio: number, stock: number, categoria:string) => {
+export const crearProducto = async (nombre: string, precio: number, stock: number, categoria: string) => {
     const docRef = await addDoc(collection(db, "productos"),
         {
             nombre,
@@ -95,17 +95,17 @@ export const escucharProductos = (
 
 
 //MODIFICAR UN DOCUMENTO MEDIANTE ID
-export const actualizarProducto=async(
-    id:string,
-    nombre:string,
-    precio:number,
-    stock:number,
-    categoria:string
-)=>{
+export const actualizarProducto = async (
+    id: string,
+    nombre: string,
+    precio: number,
+    stock: number,
+    categoria: string
+) => {
 
-    const productoRef = doc(db,"productos",id);
+    const productoRef = doc(db, "productos", id);
 
-    await updateDoc(productoRef,{
+    await updateDoc(productoRef, {
         nombre,
         precio,
         stock,
@@ -114,9 +114,61 @@ export const actualizarProducto=async(
 }
 
 //ELIMINAR PRODCUTO MEDIANTE ID
-export const eliminarProducto=async(id:string)=>{
-    const productoRef=doc(db,"productos",id);
+export const eliminarProducto = async (id: string) => {
+    const productoRef = doc(db, "productos", id);
 
     await deleteDoc(productoRef);
 }
 
+
+export const obtenerProductosDisponibles = async (): Promise<Producto[]> => {
+    const consulta = query(
+        collection(db, "productos"),
+        //where("categoria","==","tecnologia"),
+        where("stock", ">", 0),
+        //where("precio",">=",50),
+        //where("precio","<=",100),
+        limit(3),
+        orderBy("precio", "asc")
+
+    );
+
+    const querySnapshot = await getDocs(consulta);
+
+    const productos = querySnapshot.docs.map((documento) => ({
+        id: documento.id,
+        ...documento.data(),
+    })) as Producto[];
+
+    return productos;
+}
+
+
+//PARA MANEJAR LA PAGINACION
+export const obtenerProductosPaginados = async (ultimodocumento?: QueryDocumentSnapshot<DocumentData>) => {
+    let consulta;
+
+    if (ultimodocumento) {
+        consulta = query(collection(db, "productos"),
+            orderBy("precio", "asc"),
+            startAfter(ultimodocumento),
+            limit(3)
+
+        )
+    } else {
+        consulta = query(collection(db, "productos"),
+            orderBy("precio", "asc"),
+            limit(3)
+        )
+    }
+
+    const snapshot = await getDocs(consulta);
+    const productos = snapshot.docs.map((documento) => ({
+        id: documento.id,
+        ...documento.data()
+    })) as Producto[];
+
+    const nuevoUltimoDoc = snapshot.docs[snapshot.docs.length - 1];
+
+    return { productos, ultimodocumento:nuevoUltimoDoc }
+}

@@ -330,3 +330,70 @@ input[type="number"]::-webkit-outer-spin-button {
     max-width: none;
   }
 }
+
+
+/* ---------- Paginación (pegar al final de index.css) ---------- */
+/* Reutiliza .panel, .lista, .tarjetas, .tarjeta, .boton y las variables existentes */
+
+/* Botón secundario: borde fino, sin flecha, ancho según el texto */
+.boton--secundario {
+  width: auto;
+  margin-top: 0.75rem;
+  justify-content: center;
+  color: var(--tinta);
+  background: transparent;
+  border: 1px solid var(--linea);
+}
+
+.boton--secundario::after {
+  content: none;
+}
+
+.boton--secundario:hover:not(:disabled) {
+  color: #121416;
+  background: var(--acento);
+  border-color: var(--tinta);
+}
+
+/* Etiqueta de categoría dentro de la tarjeta */
+.tarjeta__categoria {
+  padding: 0.15rem 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--tinta);
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+}
+
+/* Precio y stock pueden envolver en tarjetas angostas */
+.paginacion .tarjeta__datos {
+  flex-wrap: wrap;
+  row-gap: 0.6rem;
+}
+
+/* Pie con el botón "Siguiente página" */
+.paginacion__pie {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--linea);
+}
+
+.paginacion__pie .boton {
+  width: min(100%, 260px);
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.paginacion__estado {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tenue);
+}
