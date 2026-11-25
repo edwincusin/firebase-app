@@ -3,6 +3,8 @@ import { ProductoLista } from "./components/ProductoLista"
 import { useState } from "react"
 import { obtenerProductosDisponibles, type Producto } from "./services/productoService"
 import { ProductoListaPaginados } from "./components/ProductoListaPaginada";
+import { crearDatosMatricula } from "./services/matriculaServices";
+import ConsultaMatriculas from "./components/ConsultaMatriculas";
 
 function App() {
 
@@ -10,7 +12,7 @@ function App() {
 
   return (
     <>
-       <div className="pagina">
+      {/* <div className="pagina">
         <ProductoForm
           key={productoEditar?.id ?? "Nuevo"}
           productoEditar={productoEditar}
@@ -30,8 +32,11 @@ function App() {
       console.log(productosDeConsulta);
     }
     }>CONSULTA</button>
-
-
+      <h2>MODELO DE MATRICULAS</h2>
+      <button onClick={crearDatosMatricula}>Crear Datos</button> */}
+      <div>
+        <ConsultaMatriculas />
+      </div>
     </>
   )
 }
